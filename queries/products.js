@@ -2,7 +2,7 @@ const models = require("../models/models")
 
 const createProducts = async () => {
     // store one products
-    const storeOne = await models.Store.findOne({where: {id: 1}, include: [models.Category]})
+    const storeOne = await models.Store.findOne({where: {id: 1}, include: [models.Category, models.Product]})
     const categoriesStoreOne = await storeOne.getCategories()
     const productOne = await models.Product.create({
         name: "Product 1",
@@ -41,7 +41,7 @@ const createProducts = async () => {
     await storeOne.addProducts([productOne, productTwo, productThree, productFour])
 
     //store two products
-    const storeTwo = await models.Store.findOne({where: {id: 2}, include: [models.Category]})
+    const storeTwo = await models.Store.findOne({where: {id: 2}, include: [models.Category, models.Product]})
     const categoriesStoreTwo = await storeTwo.getCategories()
     const productFive = await models.Product.create({
         name: "Product 5",
@@ -72,7 +72,7 @@ const createProducts = async () => {
     await storeTwo.addProducts([productFive, productSix, productSeven])
 
     //store three products
-    const storeThree = await models.Store.findOne({where: {id: 3}, include: [models.Category]})
+    const storeThree = await models.Store.findOne({where: {id: 3}, include: [models.Category, models.Product]})
     const categoriesStoreThree = await storeThree.getCategories()
     const productEight = await models.Product.create({
         name: "Product 8",
@@ -81,8 +81,8 @@ const createProducts = async () => {
     }, {
         include: [models.Category, models.Store]
     })
-        
-    await productEight.addCategories([categoriesStoreThree[0]])
+    
+    await productEight.setCategories([categoriesStoreThree[0]])
     
     await storeThree.addProducts([productEight])
 }

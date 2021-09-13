@@ -34,35 +34,36 @@ const getCategories = async (req, res) => {
                 error: "Store not found"
             })
         }
-        
+
         const products = await models.Product.findAll({where: {StoreId: id}, include: [models.Category]})
         const marketplaceCategories = await models.Category.findAll()
-        const categoriesWithProductsSet = new Set()
-        const categoriesWithProductsList = []
 
+        let categoryArray 
         if (products.length > 0) {
-            products.forEach(product => {
-                if(product.Categories.length > 0){
-                    categoriesWithProductsSet.add(...product.Categories)
-                } 
-            })
-        }
-        if (categoriesWithProductsSet.size > 0) {
-            categoriesWithProductsSet.forEach(category => {
-                categoriesWithProductsList.push(category)
-            })
+            categoryArray = products.reduce((acc, cur) => {
+                return [
+                    ...acc, 
+                    ...cur.Categories
+                ]
+            }, [])
         }
 
-        const categoriesWithProductsMapped = categoriesWithProductsList.map(category => {
-            return {
+        const categoryArrayMapped = categoryArray.map(category => {
+            return JSON.stringify({
                 id: category.id,
                 name: category.name,
                 description: category.description,
                 icon: category.icon,
                 createdAt: category.createdAt,
                 updatedAt: category.updatedAt
-            }
+            })
         })
+
+        const uniqueCategories = [...new Set(categoryArrayMapped)]
+        const uniqueCategoriesMapped = uniqueCategories.map(category => {
+            return JSON.parse(category)
+        })
+        
         const storeCategoriesMapped = store.Categories.map(category => {
             return {
                 id: category.id,
@@ -75,7 +76,7 @@ const getCategories = async (req, res) => {
         })
 
         return res.status(200).json({
-            categoriesWithProducts: categoriesWithProductsMapped,
+            categoriesWithProducts: uniqueCategoriesMapped,
             storeCategories: storeCategoriesMapped,
             marketplaceCategories: marketplaceCategories,
         })
