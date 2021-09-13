@@ -49,6 +49,6 @@ Por fim, foram feitas queries para determinar quais Categorias de determinada Lo
 
 ## Descrição dos Endpoints
 
-**POST `/marketplace/populate`:** esse endpoint executa drops nas tableas de Category, Store e Product se elas existirem, depois executa um sync e cria as tabelas e por fim preenche-as com dados escritos no código, como descrito acima.
+**POST `/marketplace/populate`:** esse endpoint executa drops nas tabelas de Category, Store e Product se elas existirem, depois executa um sync e cria as tabelas e por fim preenche-as com dados escritos no código, como descrito acima.
 
 **GET `/marketplace/results/:id`** esse endpoint filtra o banco de dados para retornar somente as Categorias que possuem Produtos de uma determinada Loja. Espera-se como parâmetro um `id`, que pode ir de 1 a 3 - qualquer valor fora disso retornará 404 Not Found. Ao fim da execução do endpoint é retornado um json com Categorias com Produtos, Categorias da Loja e Categorias do Marketplace.
